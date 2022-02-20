@@ -2,15 +2,21 @@
 #include <fstream>
 #include <ctime>
 
-void model(int);
+//#include "lin_model.h"
+#include "2D_model.h"
+
+//void model(int);
+//void lin_model(int);
 
 int main(){
 	bool ask = true;
 	unsigned c;
 	int start, end, num_of_trys;
-	std::ifstream in("../Dislocation/Data.txt");
+	//std::ifstream in("../Dislocation/Data.txt");
+	std::ifstream in("Dislocation/Dislocation/Data.txt");
 	std::ofstream out;          
-	out.open("../Dislocation/OUT.txt");
+	//out.open("../Dislocation/OUT.txt");
+	out.open("Dislocation/Dislocation/OUT.txt");   
 	in >> num_of_trys;
 	out << num_of_trys << "\n";
 	while (ask){

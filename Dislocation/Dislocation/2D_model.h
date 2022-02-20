@@ -16,7 +16,7 @@ void visualisation(char cells[Field_Size + 2][Field_Size + 2]){
 	}
 }
 
-bool loop_step(char (&cells_copy)[Field_Size + 2][Field_Size + 2]){
+bool loop_step(char(&cells_copy)[Field_Size + 2][Field_Size + 2]){
 	static int Probability = 8;
 	bool finished = true;
 	static char cells[Field_Size + 2][Field_Size + 2];
@@ -31,8 +31,48 @@ bool loop_step(char (&cells_copy)[Field_Size + 2][Field_Size + 2]){
 	{
 		for (int j = 1; j <= Field_Size; j++){
 			if (cells[i][j] == '0'){
-				if (cells[i - 1][j] != '0' && cells[i][j - 1] != '0' &&
-					cells[i + 1][j] != '0' && cells[i][j + 1] != '0'){
+				if (cells[i - 1][j] == '.' && cells[i][j - 1] == '.' &&
+					cells[i + 1][j] == '.' && cells[i][j + 1] == '.'){
+
+					//cells[i - 1][j] != '0' && cells[i][j - 1] != '0' &&
+					//cells[i + 1][j] != '0' && cells[i][j + 1] != '0')
+
+					reaction = rand() % Probability;
+					finished = false;
+					if (reaction == 0 && cells_copy[i - 1][j] == '.'){
+						cells_copy[i][j] = '.';
+						cells_copy[i - 1][j] = '0';
+					}
+					else if (reaction == 1 && cells_copy[i][j - 1] == '.'){
+						cells_copy[i][j] = '.';
+						cells_copy[i][j - 1] = '0';
+					}
+					else if (reaction == 2 && cells_copy[i + 1][j] == '.'){
+						cells_copy[i][j] = '.';
+						cells_copy[i + 1][j] = '0';
+					}
+					else if (reaction == 3 && cells_copy[i][j + 1] == '.'){
+						cells_copy[i][j] = '.';
+						cells_copy[i][j + 1] = '0';
+					}
+				}
+			}
+		}
+	}
+	return finished;
+}
+
+
+bool loop_step_wall(char(&cells_copy)[Field_Size + 2][Field_Size + 2]){
+	static int Probability = 8;
+	bool finished = true;
+	int reaction;
+	for (int i = 1; i <= Field_Size; i++)
+	{
+		for (int j = 1; j <= Field_Size; j++){
+			if (cells_copy[i][j] == '0'){
+				if (cells_copy[i - 1][j] == '.' && cells_copy[i][j - 1] == '.' &&
+					cells_copy[i + 1][j] == '.' && cells_copy[i][j + 1] == '.'){
 					reaction = rand() % Probability;
 					finished = false;
 					if (reaction == 0 && cells_copy[i - 1][j] == '.'){
@@ -77,15 +117,20 @@ void model(int Number_of_dislocations){
 
 	}
 	int x, y;
-	for (i = 0; i < Number_of_dislocations; i++){
-		x = rand() % Field_Size + 1;
-		y = rand() % Field_Size + 1;
-		cells[x][y] = '0';
-	}
-	while (!GetAsyncKeyState(VK_ESCAPE) && !finished){
-		finished = loop_step(cells);
-		visualisation(cells);
-		//Sleep(200);
+	if (Number_of_dislocations < Field_Size * Field_Size){
+		while (Number_of_dislocations > 0){
+			x = rand() % Field_Size + 1;
+			y = rand() % Field_Size + 1;
+			if (cells[x][y] == '.'){
+				cells[x][y] = '0';
+				Number_of_dislocations--;
+			}
+		}
+		while (!GetAsyncKeyState(VK_ESCAPE) && !finished){
+			finished = loop_step(cells);
+			visualisation(cells);
+			//Sleep(200);
+		}
 	}
 	
 	//system("pause");
