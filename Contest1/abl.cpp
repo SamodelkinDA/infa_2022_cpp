@@ -20,20 +20,20 @@ public:
     virtual bool available(Cell c) const=0;
 };
 
-class Rook: public Piece{
+class Rook: virtual public Piece{
 public:
     Rook(Cell c): Piece(c){}
     Rook(): Piece(){}
-    bool available(Cell c)  const{
+    bool available(Cell c) const{
         return ((c.v == cell.v)^(c.h == cell.h));
     }
 };
 
-class Bishop:  public Piece{
+class Bishop: virtual public Piece{
 public:
     Bishop(Cell c): Piece(c){}
     Bishop(): Piece(){}
-    bool available(Cell c)  const {
+    bool available(Cell c) const {
         int a = c.v - cell.v;
         int b = c.h - cell.h;
         return((a == b)^(a == -b));
@@ -43,7 +43,7 @@ public:
 class King: public Piece {
 public:
     King(Cell c): Piece(c){}
-    bool available(Cell c)  const {
+    bool available(Cell c) const {
         int a = c.v - cell.v;
         int b = c.h - cell.h;
         if (((a==0)&&(b==0))^((std::abs(a) <= 1)&&(std::abs(b)<= 1))){
@@ -91,18 +91,6 @@ int main() {
     pieces[3] = new Bishop(Cell('D',4));
 
     are_available(Cell('A', 1), pieces, availability, size);
-    for(auto ans : availability)
-        std::cout << ans << ' ';
-    std::cout << std::endl;
-    are_available(Cell('B', 2), pieces, availability, size);
-    for(auto ans : availability)
-        std::cout << ans << ' ';
-    std::cout << std::endl;
-    are_available(Cell('C', 3), pieces, availability, size);
-    for(auto ans : availability)
-        std::cout << ans << ' ';
-    std::cout << std::endl;
-    are_available(Cell('D', 5), pieces, availability, size);
     for(auto ans : availability)
         std::cout << ans << ' ';
     std::cout << std::endl;
